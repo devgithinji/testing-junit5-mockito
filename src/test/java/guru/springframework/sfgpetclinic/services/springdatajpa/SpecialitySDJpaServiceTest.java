@@ -12,13 +12,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SpecialitySDJpaServiceTest {
-    @Mock
+    @Mock(lenient = true)
     SpecialtyRepository specialtyRepository;
     @InjectMocks
     SpecialitySDJpaService specialtyService;
@@ -127,5 +126,25 @@ class SpecialitySDJpaServiceTest {
         assertThrows(RuntimeException.class, () -> specialtyService.delete(new Speciality()));
         //then
         then(specialtyRepository).should().delete(any());
+    }
+
+    @Test
+    void testSaveLambda() {
+        //given
+        final String MATCH_ME = "MATCH_ME";
+        Speciality speciality = new Speciality();
+        speciality.setDescription("not a match");
+
+        Speciality savedSpeciality = new Speciality();
+        savedSpeciality.setId(1L);
+
+        //need mock to only return on match MATCH_ME string
+        given(specialtyRepository.save(argThat(arg -> arg.getDescription().equals(MATCH_ME)))).willReturn(savedSpeciality);
+
+        //when
+        Speciality rs = specialtyService.save(speciality);
+
+        //then
+        assertEquals(1L, savedSpeciality.getId());
     }
 }
