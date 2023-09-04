@@ -22,6 +22,11 @@
             <name>John Thompson</name>
             <email>john@springframework.guru</email>
         </developer>
+        <developer>
+            <id>dg</id>
+            <name>Dennis Githinji</name>
+            <email>wakahiad@gmail.com</email>
+        </developer>
     </developers>
 
     <inceptionYear>2018</inceptionYear>
@@ -67,6 +72,19 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${junit-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
             <version>${junit-platform.version}</version>
             <scope>test</scope>
         </dependency>
