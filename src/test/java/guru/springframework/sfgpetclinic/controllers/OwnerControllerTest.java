@@ -6,11 +6,16 @@ import guru.springframework.sfgpetclinic.services.OwnerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -35,6 +40,19 @@ class OwnerControllerTest {
         owner = new Owner(1L, "John", "Doe");
     }
 
+
+    @Test
+    void processFindFormWildCardString() {
+        //given - none
+        List<Owner> owners = new ArrayList<>();
+        final ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        given(ownerService.findAllByLastNameLike(captor.capture())).willReturn(owners);
+        //when
+        String viewName = ownerController.processFindForm(owner, bindingResult, null);
+        //then
+        assertTrue("%Doe%".equalsIgnoreCase(captor.getValue()));
+
+    }
 
     @Test
     void processCreationFormErrorsTest() {
