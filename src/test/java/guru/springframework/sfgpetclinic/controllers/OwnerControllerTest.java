@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,6 +33,9 @@ class OwnerControllerTest {
     @Mock
     BindingResult bindingResult;
 
+    @Captor
+    ArgumentCaptor<String> stringArgumentCaptor;
+
     Owner owner;
 
 
@@ -51,6 +55,19 @@ class OwnerControllerTest {
         String viewName = ownerController.processFindForm(owner, bindingResult, null);
         //then
         assertTrue("%Doe%".equalsIgnoreCase(captor.getValue()));
+
+    }
+
+
+    @Test
+    void processFindFormWildCardStringAnnotation() {
+        //given - none
+        List<Owner> owners = new ArrayList<>();
+        given(ownerService.findAllByLastNameLike(stringArgumentCaptor.capture())).willReturn(owners);
+        //when
+        String viewName = ownerController.processFindForm(owner, bindingResult, null);
+        //then
+        assertTrue("%Doe%".equalsIgnoreCase(stringArgumentCaptor.getValue()));
 
     }
 
