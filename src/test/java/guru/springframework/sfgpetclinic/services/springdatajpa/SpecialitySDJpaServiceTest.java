@@ -6,8 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -16,6 +20,16 @@ class SpecialitySDJpaServiceTest {
     SpecialtyRepository specialtyRepository;
     @InjectMocks
     SpecialitySDJpaService specialtyService;
+
+
+    @Test
+    void findByIdTest() {
+        Speciality speciality = new Speciality();
+        Mockito.when(specialtyRepository.findById(1l)).thenReturn(Optional.of(speciality));
+        Speciality foundSpeciality = specialtyService.findById(1l);
+        assertNotNull(foundSpeciality);
+        verify(specialtyRepository).findById(1L);
+    }
 
     @Test
     void deleteById() {
@@ -45,7 +59,7 @@ class SpecialitySDJpaServiceTest {
         specialtyService.deleteById(1l);
         specialtyService.deleteById(1l);
         verify(specialtyRepository, atLeastOnce()).deleteById(1l);
-        verify(specialtyRepository,never()).deleteById(5l);
+        verify(specialtyRepository, never()).deleteById(5l);
     }
 
     @Test
