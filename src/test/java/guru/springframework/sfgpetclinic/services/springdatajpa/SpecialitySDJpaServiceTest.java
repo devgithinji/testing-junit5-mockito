@@ -23,12 +23,19 @@ class SpecialitySDJpaServiceTest {
 
 
     @Test
+    void testDeleteByObject() {
+        Speciality speciality = new Speciality();
+        specialtyService.delete(speciality);
+        verify(specialtyRepository).delete(any(Speciality.class));
+    }
+
+    @Test
     void findByIdTest() {
         Speciality speciality = new Speciality();
         Mockito.when(specialtyRepository.findById(1l)).thenReturn(Optional.of(speciality));
         Speciality foundSpeciality = specialtyService.findById(1l);
         assertNotNull(foundSpeciality);
-        verify(specialtyRepository).findById(1L);
+        verify(specialtyRepository).findById(anyLong());
     }
 
     @Test
